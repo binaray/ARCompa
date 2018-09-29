@@ -2,11 +2,11 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PetController.cs">
     <Files>
-      <File FileName="Assets\PetController.cs" Line="68" Column="38" />
+      <File FileName="Assets\PetController.cs" Line="87" Column="33" />
       <File FileName="Assets\Vuforia\Scripts\ImageTargetBehaviour.cs" Line="1" Column="1" />
       <File FileName="Assets\Vuforia\Scripts\DefaultTrackableEventHandler.cs" Line="1" Column="1" />
       <File FileName="Assets\Vuforia\Scripts\TurnOffBehaviour.cs" Line="1" Column="1" />
-      <File FileName="Assets\MoveAndRotateTowards.cs" Line="19" Column="9" />
+      <File FileName="Assets\MoveAndRotateTowards.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -8,6 +8,7 @@ public class PetController : MonoBehaviour {
 	public float distanceCap = 3.0f;
 	public Transform referencedWorldPos;
 	public Transform target;
+	public Transform forwardTarget;
 	public float minThreshold = 0.05f;
 	public float maxThreshold = 0.5f;
 	private Vector3 oldReferencedWorldPos;
@@ -82,11 +83,23 @@ public class PetController : MonoBehaviour {
 				// Move our position a step closer to the target.
 				transform.rotation = Quaternion.LookRotation (newDir);
 			}
+			if (state == States.Stationary) {
+				Vector3 targetDir = forwardTarget.position - transform.position;
+
+				// The step size is equal to speed times frame time.
+				float angularStep = angularSpeed * Time.deltaTime;
+				Vector3 newDir = Vector3.RotateTowards (transform.forward, targetDir, angularStep, 0.0f);
+				Debug.DrawRay (transform.position, newDir, Color.red);
+
+				// Move our position a step closer to the target.
+				transform.rotation = Quaternion.LookRotation (newDir);
+			}
 		}
 	}
 
 	void changeState(States newState){
 		state = newState;
+		//Debug.Log ("State is now "+newState.ToString());
 		if (newState==States.Action){
 			//Set animator trigger
 		}
