@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
   <Tracking>
+    <ImageTarget name="objscanner2" size="1.000000 0.700483" />
+    <ImageTarget name="i3070" size="1.000000 1.217066" />
+    <ImageTarget name="fruit" size="1.000000 0.695266" />
     <ImageTarget name="stones" size="1.000000 0.700000" />
   </Tracking>
 </QCARConfig>
