@@ -50,22 +50,22 @@ public class SpeechRecognitionEngine : MonoBehaviour
 				break;
 			case "light on":
                 x -= speed;
-				File.WriteAllText("C:/Users/e6440/Desktop/action.txt", "LIGHT ON");
+				File.WriteAllText("Assets/Scripts/action.txt", "LIGHT ON");
 				word = "";
 				break;
             case "light off":
                 x += speed;
-				File.WriteAllText("C:/Users/e6440/Desktop/action.txt", "LIGHT OFF");
+				File.WriteAllText("Assets/Scripts/action.txt", "LIGHT OFF");
 				word = "";
 				break;
 			case "speaker on":
 				y -= speed;
-				File.WriteAllText("C:/Users/e6440/Desktop/action.txt", "SPEAKER ON");
+				File.WriteAllText("Assets/Scripts/action.txt", "SPEAKER ON");
 				word = "";
 				break;
 			case "speaker off":
 				y += speed;
-				File.WriteAllText("C:/Users/e6440/Desktop/action.txt", "SPEAKER OFF");
+				File.WriteAllText("Assets/Scripts/action.txt", "SPEAKER OFF");
 				word = "";
 				break;
 			default:
