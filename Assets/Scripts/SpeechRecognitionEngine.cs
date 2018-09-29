@@ -17,6 +17,8 @@ public class SpeechRecognitionEngine : MonoBehaviour
     protected PhraseRecognizer recognizer;
     protected string word = "light off";
 
+	public PetController petController;
+
     private void Start()
     {
         if (keywords != null)
@@ -50,22 +52,22 @@ public class SpeechRecognitionEngine : MonoBehaviour
 				break;
 			case "light on":
                 x -= speed;
-				File.WriteAllText("Assets/Scripts/action.txt", "LIGHT ON");
+				petController.lightsOn();
 				word = "";
 				break;
             case "light off":
                 x += speed;
-				File.WriteAllText("Assets/Scripts/action.txt", "LIGHT OFF");
+				petController.lightsOff();
 				word = "";
 				break;
 			case "speaker on":
 				y -= speed;
-				File.WriteAllText("Assets/Scripts/action.txt", "SPEAKER ON");
+				petController.speakerOn();
 				word = "";
 				break;
 			case "speaker off":
 				y += speed;
-				File.WriteAllText("Assets/Scripts/action.txt", "SPEAKER OFF");
+				petController.speakerOff();
 				word = "";
 				break;
 			default:
