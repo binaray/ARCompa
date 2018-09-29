@@ -51,7 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\faceController.cs" />
+     <Compile Include="Assets\componentAnimationController.cs" />
      <Compile Include="Assets\MoveAndRotateTowards.cs" />
      <Compile Include="Assets\PetController.cs" />
      <Compile Include="Assets\Scripts\SpeechRecognitionEngine.cs" />

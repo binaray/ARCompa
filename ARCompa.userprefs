@@ -2,12 +2,13 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\SpeechRecognitionEngine.cs">
     <Files>
-      <File FileName="Assets\PetController.cs" Line="1" Column="1" />
+      <File FileName="Assets\PetController.cs" Line="62" Column="31" />
       <File FileName="Assets\Vuforia\Scripts\ImageTargetBehaviour.cs" Line="1" Column="1" />
-      <File FileName="Assets\Vuforia\Scripts\DefaultTrackableEventHandler.cs" Line="1" Column="1" />
+      <File FileName="Assets\Vuforia\Scripts\DefaultTrackableEventHandler.cs" Line="93" Column="1" />
       <File FileName="Assets\Vuforia\Scripts\TurnOffBehaviour.cs" Line="1" Column="1" />
       <File FileName="Assets\MoveAndRotateTowards.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\SpeechRecognitionEngine.cs" Line="86" Column="4" />
+      <File FileName="Assets\Scripts\SpeechRecognitionEngine.cs" Line="73" Column="10" />
+      <File FileName="Assets\componentAnimationController.cs" Line="9" Column="32" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

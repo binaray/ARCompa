@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class PetController : MonoBehaviour {
 
@@ -18,6 +19,8 @@ public class PetController : MonoBehaviour {
 	private States state;
     private Transform actionTarget = null;
     public Transform lightBulb;
+	public Transform speaker;
+	private Action currentAction = Action.Nothing;
 	public float angularSpeed = 2.0f;
 	public float xOffset = 270.0f;
 	public float yOffset = 180.0f;
@@ -28,8 +31,11 @@ public class PetController : MonoBehaviour {
 		Poked
 	}
 	public enum Action{
+		Nothing,
 		TurnOnLight,
-		TurnOffLight
+		TurnOffLight,
+		TurnOnSpeaker,
+		TurnOffSpeaker
 	}
     public Animator animatorBody;
     public Animator animatorFace;
@@ -45,12 +51,23 @@ public class PetController : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 		if (state == States.Action) {
-            if (Vector3.Distance(transform.position, actionTarget.position)<distanceCap)
+			if (!actionTarget) {
+				float step = speed * Time.deltaTime;
+				Vector3 desiredMovement;
+				desiredMovement = (referencedWorldPos.position - oldReferencedWorldPos) + Vector3.MoveTowards(transform.position, target.transform.position, 0);
+				Vector3 smoothenedMovement;
+				smoothenedMovement = alpha * (desiredMovement - transform.position) + beta * oldMovementMomentum;
+				transform.position += smoothenedMovement;
+				oldMovementMomentum = smoothenedMovement;
+				oldReferencedWorldPos = referencedWorldPos.position;
+			}
+            else if (Vector3.Distance(transform.position, actionTarget.position)<distanceCap)
             {
                 performAction();
             }
             else
             {
+				Debug.Log ("moving towards destination");
                 float step = speed * Time.deltaTime;
                 Vector3 desiredMovement;
                 desiredMovement = (referencedWorldPos.position - oldReferencedWorldPos) + Vector3.MoveTowards(transform.position, actionTarget.transform.position, step);
@@ -59,18 +76,18 @@ public class PetController : MonoBehaviour {
                 transform.position += smoothenedMovement;
                 oldMovementMomentum = smoothenedMovement;
                 oldReferencedWorldPos = referencedWorldPos.position;
+				Vector3 targetDir = actionTarget.position - transform.position;
+
+				// The step size is equal to speed times frame time.
+				float angularStep = angularSpeed * Time.deltaTime;
+				Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, angularStep, 0.0f);
+				Debug.DrawRay(transform.position, newDir, Color.red);
+
+				// Move our position a step closer to the target.
+				transform.rotation = Quaternion.LookRotation(newDir);
             }
-            Vector3 targetDir = actionTarget.position - transform.position;
-
-            // The step size is equal to speed times frame time.
-            float angularStep = angularSpeed * Time.deltaTime;
-            Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, angularStep, 0.0f);
-            Debug.DrawRay(transform.position, newDir, Color.red);
-
-            // Move our position a step closer to the target.
-            transform.rotation = Quaternion.LookRotation(newDir);
         }
-        if (state == States.Poked)
+        else if (state == States.Poked)
         {
             float step = speed * Time.deltaTime;
             Vector3 desiredMovement;
@@ -146,9 +163,7 @@ public class PetController : MonoBehaviour {
 		state = newState;
 		Debug.Log ("State is now "+newState.ToString());
 		if (newState==States.Action){
-            //Set animator trigger
-            animatorBody.SetTrigger("action");
-            animatorFace.SetTrigger("action");
+
 		}
 		else if (newState==States.Moving){
             //Set animator trigger
@@ -168,25 +183,76 @@ public class PetController : MonoBehaviour {
         }
 	}
 
+	public void lightsOn(){
+		prepareAction (Action.TurnOnLight);
+	}
+
+	public void lightsOff(){
+		prepareAction (Action.TurnOffLight);
+	}
+
+	public void speakerOn(){
+		prepareAction (Action.TurnOnSpeaker);
+	}
+
+	public void speakerOff(){
+		prepareAction (Action.TurnOffSpeaker);
+	}
+
 	public void prepareAction(Action newAction){
+		Debug.Log ("preparing action");
+		currentAction = newAction;
         if (newAction == Action.TurnOnLight && lightBulb)
         {
             actionTarget = lightBulb;
             changeState(States.Action);
         }
-		
+		else if (newAction == Action.TurnOffLight && lightBulb)
+		{
+			actionTarget = lightBulb;
+			changeState(States.Action);
+		}
+		else if (newAction == Action.TurnOnSpeaker && speaker)
+		{
+			actionTarget = speaker;
+			changeState(States.Action);
+		}
+		else if (newAction == Action.TurnOffSpeaker && speaker)
+		{
+			actionTarget = speaker;
+			changeState(States.Action);
+		}
 	}
 
     public void performAction()
     {
+		Debug.Log ("performing action");
         actionTarget = null;
+		if (currentAction == Action.TurnOnLight && lightBulb)
+		{
+			File.WriteAllText("Assets/Scripts/action.txt", "LIGHT ON");
+		}
+		else if (currentAction == Action.TurnOffLight && lightBulb)
+		{
+			File.WriteAllText("Assets/Scripts/action.txt", "LIGHT OFF");
+		}
+		else if (currentAction == Action.TurnOnSpeaker && speaker)
+		{
+			File.WriteAllText("Assets/Scripts/action.txt", "SPEAKER ON");
+		}
+		else if (currentAction == Action.TurnOffSpeaker && speaker)
+		{
+			File.WriteAllText("Assets/Scripts/action.txt", "SPEAKER OFF");
+		}
         // animation trigger
+		animatorBody.SetTrigger("action");
+		animatorFace.SetTrigger("action");
     }
 
     public void endPoked(){
 		if (actionTarget != null) {
 			changeState (States.Action);
-		} else if (Vector3.Distance (target.transform.position, transform.position) <= distanceCap) {
+		} else if (Vector3.Distance (target.transform.position, transform.position) > distanceCap) {
 			changeState (States.Moving);
 		} else {
 			changeState (States.Stationary);
@@ -194,7 +260,10 @@ public class PetController : MonoBehaviour {
 	}
 
 	public void endAction(){
-		if (Vector3.Distance (target.transform.position, transform.position) <= distanceCap) {
+		Debug.Log ("ending action");
+		currentAction = Action.Nothing;
+
+		if (Vector3.Distance (target.transform.position, transform.position) > distanceCap) {
 			changeState (States.Moving);
 		} else {
 			changeState (States.Stationary);
